@@ -1,0 +1,178 @@
+<!-- 首屏banner -->
+
+<template>
+    <div class="banner" id="banner">
+        <!-- 加载层 -->
+        <div class="bg back"><h1>徵小烨奋笔疾书...</h1></div>
+        <!-- 脚贴  -->
+        <div class="fork-me" @click="musicPlayerShow" v-if="!visible">
+            <a-icon type="double-left" class="fork-me-music"/>
+        </div>
+        <!-- 背景层 -->
+        <div data-aos="fade-in" class="bg">
+            <video class="video-back"
+                   src="../assets/video/bannerBack.mp4"
+                   autoplay="autoplay" loop="loop" muted="muted"></video>
+        </div>
+        <!-- 内容层 -->
+        <div data-aos="fade-in" class="desc">
+            <span class="avatar ant-avatar ant-avatar-circle ant-avatar-image">
+                <img draggable="false" src="../assets/avatar.jpg">
+            </span>
+            <div>
+                <h1>{{banner.title || '灵徵之烨'}}</h1>
+                <h3 class="typer white">
+                    <vue-typer :text="banner.desc || '徵烨'" :type-delay='200' eraseStyle='select-all'></vue-typer>
+                </h3>
+            </div>
+        </div>
+        <a data-aos="fade-in" class="scroll-next animated infinite bounce" href="#anchor-next" v-smooth-scroll>
+            <a-icon type="double-right"/>
+        </a>
+        <module-music-player :visible="visible" @music-hide="musicPlayerHide"></module-music-player>
+    </div>
+</template>
+
+<script lang="ts">
+    import {Component, Vue} from 'vue-property-decorator';
+    import {mapGetters} from 'vuex';
+    import ModuleMusicPlayer from "@/components/module/ModuleMusicPlayer.vue";
+    // import Player from 'zw-player';
+
+    // tslint:disable-next-line:no-var-requires
+    import {VueTyper} from 'vue-typer';
+
+    @Component({
+        components: {
+            ModuleMusicPlayer,
+            VueTyper,
+            Badge: () => import('@/components/footer/Badge.vue'),
+        },
+        data(){
+            return{
+                visible:false
+            }
+        },
+        computed: {
+            ...mapGetters(['banner']),
+        },
+        methods:{
+            musicPlayerShow(){
+                (this as any).visible = true;
+            },
+            musicPlayerHide(){
+                (this as any).visible = false;
+            },
+        }
+    })
+    export default class Banner extends Vue {
+    }
+</script>
+
+<style scoped lang="scss">
+    @import '../styles/variable';
+    @import '../styles/fork';
+
+    .banner {
+        display: flex;
+        position: relative;
+        justify-content: center;
+        align-items: center;
+        width: 100vw;
+        height: 100%;
+        overflow-x: hidden;
+        .music-hide{
+            display: none;
+        }
+        .bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            /*background: $--color-cyan url("../assets/bg_banner.jpg") no-repeat center center scroll;*/
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+            .video-back{
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                position: absolute;
+                top: 0;
+                left: 0;
+            }
+            .back {
+                z-index: -2;
+            }
+
+            h1 {
+                display: block;
+                margin-top: 45vh;
+                color: $--font-color;
+                font-size: 2em;
+                text-shadow: 0 0 5px $--color-gray;
+            }
+        }
+
+        .desc {
+            margin-bottom: 20vh;
+
+            * {
+                display: block;
+                margin: auto;
+                color: $--font-color;
+                text-shadow: 0 0 5px rgba(0, 0, 0, .5);
+            }
+
+            .avatar {
+                z-index: -1;
+                width: 160px;
+                height: 160px;
+                line-height: 160px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, .5);
+            }
+
+            h1 {
+                font-size: 3em;
+                margin: 3rem auto 1rem;
+            }
+
+            h3 {
+                font-size: 1.5em;
+
+                .vue-typer {
+                    display: inline-block;
+                }
+            }
+
+            @media screen and (max-width: $--screen-sm-min) {
+                h1 {
+                    font-size: 2.3em;
+                }
+
+                h3 {
+                    font-size: 1.3em;
+                }
+            }
+        }
+
+        .scroll-next {
+            position: absolute;
+            display: inline-block;
+            width: 100%;
+            padding: 2rem 0;
+            bottom: 1vh;
+            font-size: 1.5rem;
+            color: $--font-color;
+            animation-duration: 2s;
+            animation-delay: 1s;
+
+            * {
+                transform: rotate(45deg);
+            }
+        }
+    }
+</style>
